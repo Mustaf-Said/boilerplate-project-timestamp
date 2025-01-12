@@ -95,7 +95,7 @@ app.get("/api/whoami", (req, res) => {
 });
 
 //You can POST a URL to /api/shorturl and get a JSON response with original_url and short_url
-const url = "/api/shorturl";
+const url = "https://boilerplate-project-urlshortener.josealfu.repl.co/?v=1649098774645";
 const data = { original_url: "https://freeCodeCamp.org" };
 
 fetch(url, {
