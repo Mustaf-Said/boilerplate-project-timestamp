@@ -36,16 +36,20 @@ app.get("/api/whoami", (req, res) => {
 
 //You can POST a URL to /api/shorturl and get a JSON response with original_url and short_url
 async (getUserInput) => {
-  const url = getUserInput('url');
-  const res = await fetch(url + '/api/shorturl', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: `url=ftp:/john-doe.invalidTLD`
+  const url = getUserInput("https://dummyjson.com/todos/add");
+  const res = await fetch(url + "/api/shorturl", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: JSON.stringify({
+      todo: "https://freeCodeCamp.org",
+      completed: true,
+      userId: 99,
+    }),
   });
   if (res.ok) {
     const { error } = await res.json();
     assert.isNotNull(error);
-    assert.strictEqual(error.toLowerCase(), 'invalid url');
+    assert.strictEqual(error.toLowerCase(), "invalid url");
   } else {
     throw new Error(`${res.status} ${res.statusText}`);
   }
@@ -63,7 +67,6 @@ async (getUserInput) => {
 })
   .then((res) => res.json())
   .then(console.log); */
-
 
 // Listen on port set in environment variable or default to 3000
 var listener = app.listen(process.env.PORT || 3000, function () {
