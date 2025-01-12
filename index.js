@@ -54,7 +54,6 @@ async (getUserInput) => {
     throw new Error(`${res.status} ${res.statusText}`);
   }
 };
-
 //Todo api
 /* fetch("https://dummyjson.com/todos/add", {
   method: "POST",
