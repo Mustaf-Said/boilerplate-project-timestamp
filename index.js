@@ -36,7 +36,7 @@ app.get("/api/whoami", (req, res) => {
 
 //You can POST a URL to /api/shorturl and get a JSON response with original_url and short_url
 async (getUserInput) => {
-  const url = getUserInput('https://dummyjson.com/todos');
+  const url = getUserInput('url');
   const urlVariable = Date.now();
   const fullUrl = `${url}/?v=${urlVariable}`
   const res = await fetch(url + '/api/shorturl', {
