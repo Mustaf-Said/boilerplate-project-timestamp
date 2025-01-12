@@ -37,29 +37,17 @@ app.get("/api/whoami", (req, res) => {
 //You can POST a URL to /api/shorturl and get a JSON response with original_url and short_url
 async (getUserInput) => {
   const url = getUserInput('url');
-  const urlVariable = Date.now();
-  const fullUrl = `${url}/?v=${urlVariable}`
-  let shortenedUrlVariable;
-  const postResponse = await fetch(url + '/api/shorturl', {
+  const res = await fetch(url + '/api/shorturl', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: `url=${fullUrl}`
+    body: `url=ftp:/john-doe.invalidTLD`
   });
-  if (postResponse.ok) {
-    const { short_url } = await postResponse.json();
-    shortenedUrlVariable = short_url;
+  if (res.ok) {
+    const { error } = await res.json();
+    assert.isNotNull(error);
+    assert.strictEqual(error.toLowerCase(), 'invalid url');
   } else {
-    throw new Error(`${postResponse.status} ${postResponse.statusText}`);
-  }
-  const getResponse = await fetch(
-    url + '/api/shorturl/' + shortenedUrlVariable
-  );
-  if (getResponse) {
-    const { redirected, url } = getResponse;
-    assert.isTrue(redirected);
-    assert.strictEqual(url,fullUrl);
-  } else {
-    throw new Error(`${getResponse.status} ${getResponse.statusText}`);
+    throw new Error(`${res.status} ${res.statusText}`);
   }
 };
 
