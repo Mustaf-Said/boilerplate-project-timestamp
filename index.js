@@ -2,14 +2,13 @@
 // where your node app starts
 
 // init project
-const http = require("http");
 var express = require("express");
 var app = express();
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC
 var cors = require("cors");
-
+/* 
 function isValidDate(date) {
   return (
     date &&
@@ -22,7 +21,7 @@ function isValidTimeStamp(timestamp) {
   const result = new Date(timestamp).getTime() > 0;
   console.log("Timestamp: " + timestamp + " is " + result);
   return result;
-}
+} */
 
 app.use(cors({ optionsSuccessStatus: 200 })); // some legacy browsers choke on 204
 
@@ -33,7 +32,7 @@ app.use(express.static("public"));
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/views/index.html");
 });
-
+/* 
 app.get("/api/", function (req, res) {
   res.json({
     unix: Math.floor(new Date().getTime()),
@@ -78,10 +77,21 @@ app.get("/api/whoami", (req, res) => {
 
   // Respond with a JSON object containing the software information
   res.json({ software });
-});
+}); */
 // your first API endpoint...
 app.get("/api/hello", function (req, res) {
   res.json({ greeting: "hello API" });
+});
+
+app.get("/api/whoami", (req, res) => {
+  let yourIP = req.ip;
+  let yourLanguage = req.header("accept-language");
+  let yourSoftware = req.header("user-agent");
+  res.json({
+    ipaddress: yourIP,
+    language: yourLanguage,
+    software: yourSoftware,
+  });
 });
 
 // Listen on port set in environment variable or default to 3000
