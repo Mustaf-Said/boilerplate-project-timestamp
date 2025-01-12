@@ -35,25 +35,28 @@ app.get("/api/whoami", (req, res) => {
 });
 
 //You can POST a URL to /api/shorturl and get a JSON response with original_url and short_url
-async (getUserInput) => {
-  const url = getUserInput("https://dummyjson.com/todos/add");
-  const res = await fetch(url + "/api/shorturl", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: JSON.stringify({
-      todo: "https://freeCodeCamp.org",
-      completed: true,
-      userId: 99,
-    }),
-  });
-  if (res.ok) {
-    const { error } = await res.json();
-    assert.isNotNull(error);
-    assert.strictEqual(error.toLowerCase(), "invalid url");
-  } else {
-    throw new Error(`${res.status} ${res.statusText}`);
+app.post("/api/shorturl", async (req, res) => {
+  try {
+    const url = "https://dummyjson.com/todos/add";
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        todo: "https://freeCodeCamp.org",
+        completed: true,
+        userId: 99,
+      }),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      res.json(data);
+    } else {
+      res.status(response.status).send(response.statusText);
+    }
+  } catch (error) {
+    res.status(500).send(error.message);
   }
-};
+});
 //Todo api
 /* fetch("https://dummyjson.com/todos/add", {
   method: "POST",
