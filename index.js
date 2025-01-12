@@ -39,20 +39,29 @@ async (getUserInput) => {
   const url = getUserInput('url');
   const urlVariable = Date.now();
   const fullUrl = `${url}/?v=${urlVariable}`
-  const res = await fetch(url + '/api/shorturl', {
+  let shortenedUrlVariable;
+  const postResponse = await fetch(url + '/api/shorturl', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: `url=${fullUrl}`
   });
-  if (res.ok) {
-    const { short_url, original_url } = await res.json();
-    assert.isNotNull(short_url);
-    assert.strictEqual(original_url, `${url}/?v=${urlVariable}`);
+  if (postResponse.ok) {
+    const { short_url } = await postResponse.json();
+    shortenedUrlVariable = short_url;
   } else {
-    throw new Error(`${res.status} ${res.statusText}`);
+    throw new Error(`${postResponse.status} ${postResponse.statusText}`);
+  }
+  const getResponse = await fetch(
+    url + '/api/shorturl/' + shortenedUrlVariable
+  );
+  if (getResponse) {
+    const { redirected, url } = getResponse;
+    assert.isTrue(redirected);
+    assert.strictEqual(url,fullUrl);
+  } else {
+    throw new Error(`${getResponse.status} ${getResponse.statusText}`);
   }
 };
-
 
 //Todo api
 /* fetch("https://dummyjson.com/todos/add", {
