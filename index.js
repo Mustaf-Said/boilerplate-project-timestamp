@@ -94,6 +94,25 @@ app.get("/api/whoami", (req, res) => {
   });
 });
 
+//You can POST a URL to /api/shorturl and get a JSON response with original_url and short_url
+const url = "/api/shorturl";
+const data = { original_url: "https://freeCodeCamp.org" };
+
+fetch(url, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(data),
+})
+  .then((response) => response.json())
+  .then((data) => {
+    console.log("Shortened URL:", data);
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
+
 // Listen on port set in environment variable or default to 3000
 var listener = app.listen(process.env.PORT || 3000, function () {
   console.log("Your app is listening on port " + listener.address().port);
